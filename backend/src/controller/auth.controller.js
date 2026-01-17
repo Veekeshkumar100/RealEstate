@@ -10,15 +10,13 @@ export const signup = asyncHandler(async (req, res) => {
    throw new ApiError(400, "username is required");
   }
   if (!email) {
-   return res.status(400).json({ message: "email is required" });
+      throw new ApiError(400, "email is required");
   }
   if (!password) {
-    return res.status(400).json({ message: "password is required" });
+    throw new ApiError(400, "password is required");
   }
   if (password.length < 8) {
-   return res
-      .status(400)
-      .json({ message: "password must be at least 8 characters long" });
+    throw new ApiError(400, "password must be at least 8 characters long");
   }
 
   const existingUser = await User.findOne({
