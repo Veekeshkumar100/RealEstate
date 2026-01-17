@@ -24,7 +24,7 @@ export const signup = asyncHandler(async (req, res) => {
   });
   //   console.log("existingUser",existingUser)
   if (existingUser) {
-    return   res.status(400).json({ message: "user is already exist" });
+    throw new ApiError(400, "user is already exist");
   }
 
   const newUser = new User({ username, email, password });
