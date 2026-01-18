@@ -31,3 +31,21 @@ export const signup = asyncHandler(async (req, res) => {
   await newUser.save();
   return res.status(201).json({ message: "User registered successfully" });
 });
+export const signin = asyncHandler(async (req, res) => {
+  // Your signin logic here
+  console.log(req.body);
+  const { email, password } = req.body;
+
+   const existingUser = await User.findOne({ email });
+   if (!existingUser) {
+     throw new ApiError(400, "user does not exist");
+   }
+ const isPasswordMatch = await existingUser.comparePassword(password);
+ if(!isPasswordMatch){
+    throw new ApiError(400, "Invalid password");
+ }
+
+   const token = existingUser.generateAuthToken();
+
+   return res.cookie("token", token, { httpOnly: true }).status(201).json({ message: "User signed in successfully", token, user: existingUser });
+})
